@@ -11,28 +11,31 @@ class Grid: CCSprite {
     
     var sizeX:Int = 0
     var sizeY:Int = 0
-   
+    
     var totalAlive = 0
     var generation = 0
-    
-    
     
     override func onEnter() {
         super.onEnter()
         
         setupGrid()
         
-        userInteractionEnabled = true
+        //userInteractionEnabled = true
     }
     
     func setupGrid() {
-        
-        //create a number of cell randomly
-        totalAlive = Int(arc4random_uniform(3000))
-        
         //get the size of the grid
         sizeX = Int(contentSizeInPoints.width)
         sizeY = Int(contentSizeInPoints.height)
+        
+        //create a number of cell randomly
+        totalAlive = Int(arc4random_uniform(5000))
+        generation = 0
+        
+        if gridDictionary.count > 0{
+            removeAllChildren()
+            gridDictionary.removeAll()
+        }
         
         //create the cell
         for i in 0..<totalAlive {
@@ -50,6 +53,13 @@ class Grid: CCSprite {
             gridDictionary["\(randX)-\(randY)"] = cell
             
         }
+    }
+    
+    func evolveStep() {
+        //update the generation for the label
+        generation++
+        println(generation)
+        
     }
 }
 
