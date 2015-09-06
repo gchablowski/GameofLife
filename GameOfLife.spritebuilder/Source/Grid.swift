@@ -30,7 +30,7 @@ class Grid: CCSprite {
         sizeY = Int(contentSizeInPoints.height)
         
         //create a number of cell randomly
-        totalAlive = Int(arc4random_uniform(5000))
+        totalAlive = Int(arc4random_uniform(10000))
         generation = 0
         
         if gridDictionary.count > 0{
@@ -41,14 +41,15 @@ class Grid: CCSprite {
         //create the cell
         for i in 0..<totalAlive {
             
-            var randX = Int(arc4random_uniform(UInt32(sizeX/2))+sizeX/4)
-            var randY = Int(arc4random_uniform(UInt32(sizeY/2))+sizeY/4)
+            var randX = Float(arc4random_uniform(UInt32(sizeX/2))+arc4random_uniform(UInt32(sizeX/2)))
+            var randY = Float(arc4random_uniform(UInt32(sizeY/2))+arc4random_uniform(UInt32(sizeY/2)))
             
+            var cell = createNewCell(randX, y: randY)
             //add cell to the view
-            addChild(createNewCell(randX, y: randY))
+            addChild(cell)
             
             //add cell to our dictionary with a hash as key
-            gridDictionary["\(cell.x)-\(cell.y)"] = cell
+            gridDictionary["\(randX)-\(randY)"] = cell
         }
         
         totalAlive = gridDictionary.count
@@ -76,12 +77,12 @@ class Grid: CCSprite {
                         neightborsCount = countNeightbors(keyNeightBour.CoordX, y:keyNeightBour.CoordY)
                         
                         if neightborsCount  == 3 {
-                            
+                            var cellNew = createNewCell(keyNeightBour.CoordX, y: keyNeightBour.CoordY)
                             //add cell to the view
-                            addChild(createNewCell(keyNeightBour.CoordX, y: keyNeightBour.CoordY))
+                            addChild(cellNew)
                             
                             //add cell to our dictionary with a hash as key
-                            gridNewDictionary[keyNeightBour.keyname] = cell
+                            gridNewDictionary[keyNeightBour.keyname] = cellNew
                         }
                     }
                 }
@@ -161,7 +162,12 @@ class Grid: CCSprite {
             CoordX=x+1
             CoordY=y+1
         }
-        
+        //If the coodinate are negative
+        if CoordX < 0 || CoordY < 0 {
+            CoordX = Float(sizeX) - CoordX
+            CoordY = Float(sizeY) - CoordY
+            keyname = "\(CoordX)-\(CoordY)"
+        }
         return (CoordX:CoordX, CoordY:CoordY, keyname:keyname)
     }
     
