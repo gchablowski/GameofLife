@@ -1,0 +1,42 @@
+# SpriteBuilder
+#
+*.ppng
+Source/Resources/Published-iOS
+Source/Resources/Published-Android
+Published-Packages
+
+# Xcode
+#
+build/
+DerivedData
+xcuserdata
+!default.mode1v3
+!default.mode2v3
+!default.pbxuser
+!default.perspectivev3
+*.hmap
+*.ipa
+*.mode1v3
+*.mode2v3
+*.moved-aside
+*.pbxuser
+*.perspective
+*.perspectivev3
+*.swp
+*.xccheckout
+*.xcuserstate
+*~.nib
+.DS_Store
+
+# CocoaPods
+Pods/
+
+
+# Misc
+*.sconsign.dblite
+*.pyc
+*.orig
+*.ninja_log
+
+    Status API Training Shop Blog About Pricing 
+
