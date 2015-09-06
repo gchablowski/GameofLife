@@ -16,8 +16,6 @@ class Grid: CCSprite {
     var totalAlive:Int = 0
     var generation:Int = 0
     
-    var evolve:Int = 0
-    
     override func onEnter() {
         super.onEnter()
         
@@ -45,63 +43,46 @@ class Grid: CCSprite {
             
             var randX = Int(arc4random_uniform(UInt32(sizeX/2))+sizeX/4)
             var randY = Int(arc4random_uniform(UInt32(sizeY/2))+sizeY/4)
-            var cell = Cell()
-            cell.x = CGFloat(randX)
-            cell.y = CGFloat(randY)
-            cell.position = CGPoint(x: cell.x, y: cell.y)
-            cell.visible = true
             
             //add cell to the view
-            addChild(cell)
-            
+            addChild(createNewCell(randX, y: randY))
             
             //add cell to our dictionary with a hash as key
             gridDictionary["\(cell.x)-\(cell.y)"] = cell
-            
         }
         
         totalAlive = gridDictionary.count
     }
     
     func evolveStep() {
-        evolve = 1
         removeAllChildren()
         var gridNewDictionary = [String: Cell]()
         //treat the celle alive
         for (key, cell)in gridDictionary {
             var neightborsCount = countNeightbors(Float(cell.x), y:Float(cell.y))
-            
-            if neightborsCount == 2 || neightborsCount == 3 {
-                //add cell to the view
-                addChild(cell)
-                //add cell to our dictionary with a hash as key
-                gridNewDictionary["\(cell.x)-\(cell.y)"] = cell
-            }
-            
-            //test neightbours
-            for j in 0..<8{
-                var keyNeightBour = keyNeightbors(j, x: Float(cell.x), y: Float(cell.y))
+            if neightborsCount != 0 {
+                if neightborsCount == 2 || neightborsCount == 3 {
+                    //add cell to the view
+                    addChild(cell)
+                    //add cell to our dictionary with a hash as key
+                    gridNewDictionary["\(cell.x)-\(cell.y)"] = cell
+                }
                 
-                if nil == gridDictionary[keyNeightBour.keyname] {
-                    neightborsCount = countNeightbors(keyNeightBour.CoordX, y:keyNeightBour.CoordY)
+                //test neightbours
+                for j in 0..<8{
+                    var keyNeightBour = keyNeightbors(j, x: Float(cell.x), y: Float(cell.y))
                     
-                    if neightborsCount  == 3 {
-                        //create anew cell to add to the dictionary
+                    if nil == gridDictionary[keyNeightBour.keyname] {
+                        neightborsCount = countNeightbors(keyNeightBour.CoordX, y:keyNeightBour.CoordY)
                         
-                        
-                        var cell = Cell()
-                        cell.x = CGFloat(keyNeightBour.CoordX)
-                        cell.y = CGFloat(keyNeightBour.CoordY)
-                        cell.position = CGPoint(x: cell.x, y: cell.y)
-                        cell.visible = true
-                        
-                        //add cell to the view
-                        addChild(cell)
-                        
-                        
-                        
-                        //add cell to our dictionary with a hash as key
-                        gridNewDictionary[keyNeightBour.keyname] = cell
+                        if neightborsCount  == 3 {
+                            
+                            //add cell to the view
+                            addChild(createNewCell(keyNeightBour.CoordX, y: keyNeightBour.CoordY))
+                            
+                            //add cell to our dictionary with a hash as key
+                            gridNewDictionary[keyNeightBour.keyname] = cell
+                        }
                     }
                 }
             }
@@ -113,7 +94,16 @@ class Grid: CCSprite {
         //update for the label
         totalAlive = gridDictionary.count
         generation++
-        evolve = 0
+    }
+    
+    func createNewCell(x: Float, y: Float) -> Cell {
+        var cell = Cell()
+        cell.x = CGFloat(x)
+        cell.y = CGFloat(y)
+        cell.position = CGPoint(x: cell.x, y: cell.y)
+        cell.visible = true
+        
+        return cell
     }
     
     func countNeightbors(x: Float, y: Float) -> Int {
