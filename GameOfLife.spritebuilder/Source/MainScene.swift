@@ -29,17 +29,18 @@ class MainScene: CCNode {
     func stop() {
         unschedule("step")
         grid.setupGrid()
-
+        
         generationLabel.string = "\(grid.generation)"
         populationLabel.string = "\(grid.totalAlive)"
     }
     
     func step() {
         
-        grid.evolveStep()
+            grid.evolveStep()
+        
         
         generationLabel.string = "\(grid.generation)"
         populationLabel.string = "\(grid.totalAlive)"
     }
-
+    
 }
